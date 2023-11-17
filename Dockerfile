@@ -14,6 +14,9 @@ RUN pip install setuptools==58.2.0 \
                 PyEventEmitter \
                 pyserial
 
+RUN apt-get install -y ros-$ROS_DISTRO-joint-state-publisher \
+		               ros-$ROS_DISTRO-xacro
+
 #RUN apt-get install -y ros-$ROS_DISTRO-navigation2 \
 #		       ros-$ROS_DISTRO-nav2-bringup
 
