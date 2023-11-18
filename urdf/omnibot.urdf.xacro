@@ -9,10 +9,10 @@
     <xacro:property name="wheel_radius" value="0.07937"/>
     <xacro:property name="wheel_width" value="0.060"/>
     <xacro:property name="wheel_ygap" value="-0.0595"/> 
-    <xacro:property name="wheel_zoff" value="-0.041"/>
-    <xacro:property name="wheel_xoff" value="0.15297"/>
+    <xacro:property name="wheel_zoff" value="${(-base_height/2.0)-0.041}"/>
+    <xacro:property name="wheel_xoff" value="-0.15297"/>
 
-    <xacro:property name="caster_xoff" value="-0.15297"/>
+    <xacro:property name="caster_xoff" value="0.15297"/>
 
     <!-- Robot Base -->
     <link name="base_link">
@@ -28,11 +28,43 @@
 
     <!-- Robot Footprint -->
     <link name="base_footprint"/>
-
     <joint name="base_joint" type="fixed">
         <parent link="base_link"/>
         <child link="base_footprint"/>
-        <origin xyz="0.0 0.0 ${-(wheel_radius+wheel_zoff)}" rpy="0 0 0"/>
+        <origin xyz="0.0 0.0 ${wheel_zoff-wheel_radius}" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Laser -->
+    <link name="laser_mount"/>
+    <joint name="laser_mount_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="laser_mount"/>
+        <origin xyz="${base_length/2-0.008} 0.0 ${base_height/2.0}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="laser">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${0.035/2.0}" length="0.04"/>
+            </geometry>
+            <material name="Blue">
+                <color rgba="0.0 0.0 1.0 1.0"/>
+            </material>
+        </visual>
+    </link>
+     <joint name="laser_joint" type="fixed">
+        <parent link="laser_mount"/>
+        <child link="laser"/>
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    </joint>
+
+    <!-- IMU -->
+    <link name="imu"></link>
+    <joint name="imu_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="imu"/>
+        <origin xyz="0.2 -.1 ${-base_height/2+0.02}" rpy="0 0 0"/>
     </joint>
 
     <!-- Wheels -->
@@ -43,8 +75,8 @@
                 <geometry>
                     <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
                 </geometry>
-                <material name="Gray">
-                    <color rgba="0.5 0.5 0.5 1.0"/>
+                <material name="Magenta">
+                    <color rgba="1.0 0.0 1.0 1.0"/>
                 </material>
             </visual>
         </link>
@@ -52,7 +84,7 @@
         <joint name="${prefix}_joint" type="continuous">
             <parent link="base_link"/>
             <child link="${prefix}_link"/>
-            <origin xyz="${x_reflect*wheel_xoff} ${y_reflect*(base_width/2+wheel_ygap)} ${-wheel_zoff}" rpy="0 0 0"/>
+            <origin xyz="${x_reflect*wheel_xoff} ${y_reflect*(base_width/2+wheel_ygap)} ${wheel_zoff}" rpy="0 0 0"/>
             <axis xyz="0 1 0"/>
         </joint>
     </xacro:macro>
@@ -65,10 +97,10 @@
         <link name="${prefix}_link">
             <visual>
                 <geometry>
-                    <sphere radius="${(wheel_radius+wheel_zoff-(base_height/2))}"/>
+                    <sphere radius="${wheel_radius}"/>
                 </geometry>
-                <material name="Cyan">
-                    <color rgba="0 1.0 1.0 1.0"/>
+                <material name="Black">
+                    <color rgba="0 0 0 .5"/>
                 </material>
             </visual>
         </link>
@@ -76,7 +108,7 @@
         <joint name="${prefix}_joint" type="fixed">
             <parent link="base_link"/>
             <child link="${prefix}_link"/>
-            <origin xyz="${caster_xoff} ${y_reflect*(base_width/2+wheel_ygap)} ${-(base_height/2)}" rpy="0 0 0"/>
+            <origin xyz="${caster_xoff} ${y_reflect*(base_width/2+wheel_ygap)} ${wheel_zoff}" rpy="0 0 0"/>
         </joint>
     </xacro:macro>
 
