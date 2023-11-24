@@ -15,8 +15,9 @@ RUN pip install setuptools==58.2.0 \
                 pyserial
 
 RUN apt-get install -y ros-$ROS_DISTRO-joint-state-publisher \
-		               ros-$ROS_DISTRO-xacro
-
+		               ros-$ROS_DISTRO-xacro \
+                       ros-$ROS_DISTRO-ros2-control \
+                       ros-$ROS_DISTRO-ros2-controllers
 #RUN apt-get install -y ros-$ROS_DISTRO-navigation2 \
 #		       ros-$ROS_DISTRO-nav2-bringup
 
@@ -41,6 +42,11 @@ RUN echo 'source /opt/ros/'$ROS_DISTRO'/setup.bash' >> /root/.bashrc
 RUN echo 'test -f "/ros2_ws/install/setup.bash" && source "/ros2_ws/install/setup.bash"' >> /root/.bashrc
 
 WORKDIR $ROS_WS
+
+# TODO install package
+# pull omnibot repo into $ROS_WS/src/omnibot
+# RUN rosdep install -i --from-path src --rosdistro iron -y
+# RUN colcon build --packages-select omnibot --symlink-install
 
 # pimp up prompt with hostame and color
 RUN echo "PS1='\${debian_chroot:+(\$debian_chroot)}\\[\\033[01;35m\\]\\u@\\h\\[\\033[00m\\] \\[\\033[01;34m\\]\\w\\[\\033[00m\\] 🤖 '"  >> /root/.bashrc

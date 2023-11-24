@@ -1,0 +1,11 @@
+<library path="omnibot">
+  <class name="omnibot/OmnibotSystemHardware"
+         type="omnibot::OmnibotSystemHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The ros2_control Omnibot driver using a system hardware interface-type.
+      It uses velocity command and position state interface.
+      Adopted from example at: https://github.com/ros-controls/ros2_control_demos/tree/4c5bbb8184e09016f69391bdb3d6ade39717ebed/example_2
+    </description>
+  </class>
+</library>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot name="omnibot_v2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:arg name="use_sim" default="false" />
+    <xacro:arg name="mecanum" default="false" />
+
+    <xacro:include filename="omnibot_body.urdf.xacro" ns="omnibot" />
+    <xacro:omnibot.omnibot_body mecanum="$(arg mecanum)" use_sim="$(arg use_sim)"/>
+
+    <xacro:include filename="../ros2_control/omnibot_control.urdf.xacro" ns="omnibot" />
+    <xacro:omnibot.omnibot_control name="OmnibotV2" use_mock_hardware="false"/>
+
+</robot>
