@@ -65,7 +65,7 @@ def generate_launch_description():
         [
             FindPackageShare("omnibot").find('omnibot'),
             "config",
-            "controllers.yaml",
+            "omnibot_controllers.yaml",
         ]
     )
 
