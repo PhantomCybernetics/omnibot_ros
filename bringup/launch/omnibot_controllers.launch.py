@@ -74,15 +74,21 @@ def generate_launch_description():
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
         output="both",
+        remappings=[
+            # ("/imu_sensor_node/imu", "/_imu/data_raw"),
+            ("~/motors_cmd", "/_motors_cmd"),
+            ("~/motors_response", "/_motors_response"),
+            ("/omnibot_base_controller/cmd_vel_unstamped", "/cmd_vel"),
+        ],
     )
     robot_state_pub_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
-        remappings=[
-            ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
-        ],
+        # remappings=[
+        #     ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
+        # ],
     )
 
     joint_state_broadcaster_spawner = Node(

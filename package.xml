@@ -10,9 +10,12 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>hardware_interface</depend>
+  <depend>controller_interface</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>realtime_tools</depend>
+  <depend>imu_sensor_broadcaster</depend>
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>diff_drive_controller</exec_depend>

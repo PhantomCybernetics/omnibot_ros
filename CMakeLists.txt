@@ -8,6 +8,8 @@ endif()
 # find dependencies
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   hardware_interface
+  controller_interface
+  realtime_tools
   pluginlib
   rclcpp
   rclcpp_lifecycle
