@@ -74,7 +74,7 @@
             <origin xyz="${base_length/2-0.008} 0.0 ${base_height/2.0}" rpy="0 0 0"/>
         </joint>
 
-        <link name="base_laser">
+        <link name="laser">
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
@@ -87,7 +87,7 @@
         </link>
         <joint name="laser_joint" type="fixed">
             <parent link="laser_mount"/>
-            <child link="base_laser"/>
+            <child link="laser"/>
             <origin xyz="0 0 0.02" rpy="0 0 0"/>
         </joint>
 

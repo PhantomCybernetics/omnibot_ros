@@ -60,5 +60,19 @@ services:
       - /dev:/dev
     command:
       ros2 launch phntm_bridge bridge_launch.py
+  
+  omnibot_lidar:
+    image: ld19_lidar:iron
+    container_name: omnibot-lidar
+    hostname: omnibot-lidar.local
+    restart: unless-stopped
+    privileged: false
+    environment:
+      - TERM=xterm
+    devices:
+      - /dev/ttyUSB1:/dev/ld19_lidar
+    command: >
+      ros2 launch ld19_lidar lidar.launch.py
+        topic_name:=/scan frame_id:=base_laser
 ```
 
