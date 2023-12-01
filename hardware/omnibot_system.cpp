@@ -237,8 +237,8 @@ void OmnibotSystemHardware::motor_state_cb(const std::shared_ptr<JointState> msg
 }
 
 
-hardware_interface::return_type OmnibotSystemHardware::read(
-  const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
+return_type OmnibotSystemHardware::read(
+  const rclcpp::Time & time, const rclcpp::Duration & period)
 {
   std::shared_ptr<JointState> motor_state;
   received_motor_state_msg_ptr_.get(motor_state);
@@ -270,7 +270,7 @@ hardware_interface::return_type OmnibotSystemHardware::read(
   return return_type::OK;
 }
 
-hardware_interface::return_type omnibot ::OmnibotSystemHardware::write(
+return_type omnibot ::OmnibotSystemHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   if (realtime_motor_command_publisher_->trylock())
@@ -280,12 +280,13 @@ hardware_interface::return_type omnibot ::OmnibotSystemHardware::write(
 
     RCLCPP_DEBUG(rclcpp::get_logger("OmnibotSystem"), "Wrtiting motors cmd message");
 
-    int i = 0;
+    // int i = 0;
     for (auto const& joint : velocity_command_joint_order_)
     {
-      RCLCPP_INFO(rclcpp::get_logger("OmnibotSystem"), "Setting motor %d / %s to %f (%d)", i, joint.c_str(), vel_commands_[joint], int8_t(vel_commands_[joint]));
-      motor_command.data.push_back(int8_t(vel_commands_[joint]));
-      i++;
+      int8_t val = static_cast<int8_t>(vel_commands_[joint]);
+      // RCLCPP_INFO(rclcpp::get_logger("OmnibotSystem"), "Setting motor %d / %s to %g (int8 %d)", i, joint.c_str(), vel_commands_[joint], val);
+      motor_command.data.push_back(val);
+      // i++;
       // motor_command.data.push_back(10);
     }
 

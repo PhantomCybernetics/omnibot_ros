@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 10  # Hz
+    update_rate: 25  # Hz
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -14,7 +14,7 @@ omnibot_base_controller:
     right_wheel_names: ["drivewhl_r_joint"]
 
     wheel_separation: 0.442 # 0.561-(2*0.0595)
-    wheels_per_side: 1  # actually 1 + coaster (?)
+    wheels_per_side: 1  # actually 1 + coaster but specifying number of control signals here
     wheel_radius: 0.07937
 
     wheel_separation_multiplier: 1.0
@@ -27,8 +27,8 @@ omnibot_base_controller:
     pose_covariance_diagonal : [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
 
-    open_loop: true
-    enable_odom_tf: true
+    open_loop: false # If set to true the odometry of the robot will be calculated from the commanded values and not from feedback
+    enable_odom_tf: true # Publish transformation between odom_frame_id and base_frame_id
 
     cmd_vel_timeout: 0.5
     #publish_limited_velocity: true
