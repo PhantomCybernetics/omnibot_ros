@@ -3,15 +3,19 @@
 ## Omnibot Directory Listing
 ```
  |- compose.yaml # Docker Compose file, see below
+ |
  |- omnibot_ros # Omnibot V2 ROS package (/description , /tf, odometry)
  |   |          # see https://github.com/PhantomCybernetics/omnibot_ros
  |   |- description # (URDFs & meshes live-linked to container for easy edits, just restart)
+ |
  |- ld19_lidar # LD19 Lidar fork, see https://github.com/PhantomCybernetics/ld19_lidar
+ |
  |- phntm_bridge  # phntm bridge, see https://github.com/PhantomCybernetics/phntm_bridge
  |- phntm_bridge.yaml # phntm bridge config
- |
  |- aioice # temp dev mount (phntm_bridge dep)
  |- aiortc # temp dev mount (phntm_bridge dep)
+ |
+ |- omnibot_firmware # Omnibot ESP32 micro-ROS firmware, see https://github.com/PhantomCybernetics/omnibot_firmware
 ```
 
 ## Install Docker & Docker Compose
