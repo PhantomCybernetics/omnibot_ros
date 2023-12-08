@@ -44,14 +44,15 @@ RUN echo 'test -f "/ros2_ws/install/setup.bash" && source "/ros2_ws/install/setu
 
 WORKDIR $ROS_WS
 
-# TODO install package
-# pull omnibot repo into $ROS_WS/src/omnibot
-# RUN rosdep install -i --from-path src --rosdistro iron -y
-# RUN colcon build --packages-select omnibot
+# install package
+RUN git clone https://github.com/PhantomCybernetics/omnibot_ros $ROS_WS/src/omnibot
+RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
+    rosdep update --rosdistro $ROS_DISTRO && \
+    rosdep install -i --from-path src --rosdistro iron -y && \
+    colcon build --packages-select omnibot
 
 # pimp up prompt with hostame and color
 RUN echo "PS1='\${debian_chroot:+(\$debian_chroot)}\\[\\033[01;35m\\]\\u@\\h\\[\\033[00m\\] \\[\\033[01;34m\\]\\w\\[\\033[00m\\] 🤖 '"  >> /root/.bashrc
-
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD [ "bash" ]
