@@ -1,17 +1,34 @@
-# Omnibot ROS Driver
+# Omnibot V2 ROS Driver
 
-## Install Docker & Dockerc Compose
+## Omnibot Directory Listing
+```
+ |- compose.yaml # Docker Compose file, see below
+ |- omnibot_ros # Omnibot V2 ROS package (/description , /tf, odometry)
+ |   |          # see https://github.com/PhantomCybernetics/omnibot_ros
+ |   |- description # (URDFs & meshes live-linked to container for easy edits, just restart)
+ |- ld19_lidar # LD19 Lidar fork, see https://github.com/PhantomCybernetics/ld19_lidar
+ |- phntm_bridge  # phntm bridge, see https://github.com/PhantomCybernetics/phntm_bridge
+ |- phntm_bridge.yaml # phntm bridge config
+ |
+ |- aioice # temp dev mount (phntm_bridge dep)
+ |- aiortc # temp dev mount (phntm_bridge dep)
+```
 
-## Buid Container
+## Install Docker & Docker Compose
+
+## Build the Image
 ```bash
-docker build -f Dockerfile -t omnibot:iron .
+docker build -f Dockerfile -t phntm/omnibot-ros:iron .
 ```
 
 Add the following to you compose.yaml
 ```yaml
+version: "3.9"
+
 services:
+
   omnibot:
-    image: omnibot/firmware:iron
+    image: phntm/omnibot-ros:iron
     container_name: omnibot
     hostname: omnibot.local
     restart: unless-stopped
@@ -19,51 +36,14 @@ services:
     environment:
       - TERM=xterm
     volumes:
-      # - ~/omnibot_firmware:/ros2_ws/src/omnibot
-      # - ~/omnibot_firmware.yaml:/ros2_ws/omnibot.yaml
-      - ~/omnibot_ws:/ros2_ws
-      # devices:
-      # - /dev/ttyUSB0:/dev/ttyUSB0
+      - ~/omnibot_ros:/ros2_ws/src/omnibot
     command:
-      /bin/sh -c "while sleep 1000; do :; done"
-      #/bin/sh /phntm_bridge_ui/run.web-ui.sh
+      ros2 launch omnibot omnibot_controllers.launch.py
+      # /bin/sh -c "while sleep 1000; do :; done"
 
-  omnibot_microros:
-    image: microros/micro-ros-agent:iron
-    container_name: omnibot-microros
-    restart: unless-stopped
-    privileged: true
-    devices:
-      - /dev:/dev
-    command:
-      serial --dev /dev/ttyUSB0
-  
-  omnibot_bridge:
-    image: phntm/bridge:iron
-    container_name: omnibot-bridge
-    hostname: omnibot-bridge.local
-    restart: unless-stopped
-    privileged: true
-    network_mode: host
-    cpuset: '0,1,2'
-    shm_size: 200m #more room for shared camera frames
-    environment:
-      - TERM=xterm
-    volumes:
-      - ~/phntm_bridge:/ros2_ws/src/phntm_bridge
-      - ~/omnibot_bridge_params.yaml:/ros2_ws/phntm_bridge_params.yaml
-      - /var/run:/host_run
-      - /tmp:/tmp
-      - ~/aioice:/ros2_ws/aioice
-      - ~/aiortc:/ros2_ws/aiortc
-    devices:
-      - /dev:/dev
-    command:
-      ros2 launch phntm_bridge bridge_launch.py
-  
-  omnibot_lidar:
-    image: ld19_lidar:iron
-    container_name: omnibot-lidar
+  ld19_lidar:
+    image: phntm/ld19-lidar:iron
+    container_name: ld19-lidar
     hostname: omnibot-lidar.local
     restart: unless-stopped
     privileged: false
@@ -74,5 +54,37 @@ services:
     command: >
       ros2 launch ld19_lidar lidar.launch.py
         topic_name:=/scan frame_id:=base_laser
-```
+
+  omnibot_microros:
+    image: microros/micro-ros-agent:iron
+    container_name: omnibot-microros
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev:/dev
+    command: >
+      serial --dev /dev/ttyUSB0
+  
+  phntm_bridge:
+    image: phntm/bridge:iron
+    container_name: phntm-bridge
+    hostname: phntm-bridge.local
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    cpuset: '0,1,2'
+    shm_size: 200m #more room for shared camera frames
+    environment:
+      - TERM=xterm
+    volumes:
+      - ~/phntm_bridge.yaml:/ros2_ws/phntm_bridge_params.yaml
+      - ~/phntm_bridge:/ros2_ws/src/phntm_bridge
+      - ~/aioice:/ros2_ws/aioice
+      - ~/aiortc:/ros2_ws/aiortc
+      - /var/run:/host_run
+      - /tmp:/tmp
+    devices:
+      - /dev:/dev
+    command:
+      ros2 launch phntm_bridge bridge_launch.py
 
