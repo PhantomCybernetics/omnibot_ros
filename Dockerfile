@@ -1,4 +1,4 @@
-ARG ROS_DISTRO=iron
+ARG ROS_DISTRO=humble
 
 FROM ros:$ROS_DISTRO
 
@@ -48,7 +48,7 @@ WORKDIR $ROS_WS
 RUN git clone https://github.com/PhantomCybernetics/omnibot_ros $ROS_WS/src/omnibot
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
     rosdep update --rosdistro $ROS_DISTRO && \
-    rosdep install -i --from-path src --rosdistro iron -y && \
+    rosdep install -i --from-path src --rosdistro $ROS_DISTRO -y && \
     colcon build --packages-select omnibot
 
 # pimp up prompt with hostame and color

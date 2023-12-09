@@ -22,7 +22,7 @@
 
 ## Build the Image
 ```bash
-docker build -f Dockerfile -t phntm/omnibot-ros:iron .
+docker build -f Dockerfile -t phntm/omnibot-ros:humble .
 ```
 
 Add the following to you compose.yaml
@@ -32,7 +32,7 @@ version: "3.9"
 services:
 
   omnibot:
-    image: phntm/omnibot-ros:iron
+    image: phntm/omnibot-ros:humble
     container_name: omnibot
     hostname: omnibot.local
     restart: unless-stopped
@@ -46,7 +46,7 @@ services:
       # /bin/sh -c "while sleep 1000; do :; done"
 
   ld19_lidar:
-    image: phntm/ld19-lidar:iron
+    image: phntm/ld19-lidar:humble
     container_name: ld19-lidar
     hostname: omnibot-lidar.local
     restart: unless-stopped
@@ -60,7 +60,7 @@ services:
         topic_name:=/scan frame_id:=base_laser
 
   omnibot_microros:
-    image: microros/micro-ros-agent:iron
+    image: microros/micro-ros-agent:humble
     container_name: omnibot-microros
     restart: unless-stopped
     privileged: true
@@ -70,7 +70,7 @@ services:
       serial --dev /dev/ttyUSB0
   
   phntm_bridge:
-    image: phntm/bridge:iron
+    image: phntm/bridge:humble
     container_name: phntm-bridge
     hostname: phntm-bridge.local
     restart: unless-stopped
